@@ -16,8 +16,6 @@ var steamBot = new SteamUser()
 var commands = {};
 
 steamBot.setOptions(config.steamOptions)
-var sentryFile = fs.readFileSync("./steamdata/sentry.morganamilo.bin");
-steamBot.setSentry(sentryFile);
 
 
 function getSteamName(steamID) {
@@ -64,6 +62,14 @@ function callCommand(message) {
         commandFunc.apply(this, tokens);
     }
 }
+
+function makeChannel(message){
+    var server = message.guild;
+    var usrname = message.author.username;
+
+    server.createChannel(usrname, "text");
+}
+
 
 
 commands["!bind"] = function(message, channelName, steamName) {
@@ -246,11 +252,19 @@ steamBot.on('user', function(sid, user) {
 
 steamBot.on('friendMessage', function(senderID, message) {
 	console.log(senderID, message);
-
-    var channelID = bind.getBindSteam(senderID.getSteamID64());
+    var steamID = senderID.getSteamID64()
+    var channelID = bind.getBindSteam(steamID);
 
     if (channelID) {
         discordBot.channels.get(channelID).send(message);
+    } else {
+        var server = discordBot.guilds.array()[0];
+        var username = getSteamName(steamID);
+
+        server.createChannel(utils.stripUnicode(username), "text").then(channel => {
+            bind.bind(channel.id, steamID);
+            channel.send(message);
+        });
     }
 });
 
