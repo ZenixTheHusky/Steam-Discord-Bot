@@ -84,13 +84,13 @@ commands["!bind"] = function(message, channelName, steamName) {
     message.reply("Binded " + channelID + " To " + steamID);
 }
 
-commands["!cubind"] = function(channelName) {
+commands["!cubind"] = function(message, channelName) {
     var channelID = getChannelID(channelName);
     bind.unbindChannel(channelID);
 }
 
-commands["!subind"] = function(message, steamNAme) {
-    var steamID = getSteamID(steamNAme);
+commands["!subind"] = function(message, steamName) {
+    var steamID = getSteamID(steamName);
     bind.unbindSteam(steamID);
 }
 
@@ -259,4 +259,3 @@ if (process.argv[2] === "dry") {
         steamBot.logOn(config.steamOptions);
         discordBot.login(config.discordToken);
 }
-
