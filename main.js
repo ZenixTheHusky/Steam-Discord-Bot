@@ -1,9 +1,9 @@
 const fs = require("fs");
-const Discord = require('./discord.js/src/index.js');
+
+const Discord = require('discord.js');
 const discordBot = new Discord.Client();
 
-//const ChatBot = require("steam-chat-bot").ChatBot;
-const SteamUser = require('./node-steam-user/index.js');
+const SteamUser = require('steam-user');
 
 
 const config = require("./config");
